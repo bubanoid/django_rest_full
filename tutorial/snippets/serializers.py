@@ -1,11 +1,26 @@
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from snippets.models import LANGUAGE_CHOICES, STYLE_CHOICES
+from snippets.models import Snippet, File, Folder
 
 
 class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
         fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = ('id', 'name', 'created')
+
+
+class FolderSerializer(serializers.ModelSerializer):
+    files = FileSerializer(many=True)
+
+    class Meta:
+        model = Folder
+        fields = ('id', 'name', 'files')
 
 
 # class SnippetSerializer(serializers.Serializer):

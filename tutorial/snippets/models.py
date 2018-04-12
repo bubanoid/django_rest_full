@@ -17,3 +17,20 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+class File(models.Model):
+    name = models.CharField(max_length=100, blank=True, default='')
+    # folder = models.ForeignKey('Folder', models.DO_NOTHING, related_name='files')
+    folder = models.ForeignKey('Folder', models.CASCADE, related_name='files')
+    created = models.DateTimeField()
+
+    # class Meta:
+    #     ordering = ('name',)
+
+
+class Folder(models.Model):
+    name = models.CharField(max_length=100, blank=True, default='')
+
+    # class Meta:
+    #     ordering = ('name',)

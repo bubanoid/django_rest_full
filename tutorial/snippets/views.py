@@ -5,8 +5,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from snippets.models import Snippet, File, Folder
+from snippets.serializers import SnippetSerializer, FolderSerializer
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework import mixins
@@ -16,6 +16,11 @@ from rest_framework import generics
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+
+
+class FolderList(generics.ListAPIView):
+    queryset = Folder.objects.prefetch_related('files').all()
+    serializer_class = FolderSerializer
 
 
 # class SnippetList(mixins.ListModelMixin,
