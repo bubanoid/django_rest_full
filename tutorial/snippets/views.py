@@ -11,6 +11,9 @@ from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework import mixins
 from rest_framework import generics
+from datetime import time, datetime
+from pytz import utc
+import iso8601
 
 
 class SnippetList(generics.ListCreateAPIView):
@@ -21,6 +24,12 @@ class SnippetList(generics.ListCreateAPIView):
 class FolderList(generics.ListAPIView):
     queryset = Folder.objects.prefetch_related('files').all()
     serializer_class = FolderSerializer
+
+    def list(self, request, *args, **kwargs):
+        # some_day = iso8601.parse_date("2018-04-13T06:56:46Z")
+        # self.queryset = Folder.objects.prefetch_related('files').filter(files__created__range=(datetime.combine(some_day, time(6, 56, 46, tzinfo=utc)), datetime.combine(some_day, time(6, 56, 47, tzinfo=utc)))).all()
+        serializer = FolderSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 # class SnippetList(mixins.ListModelMixin,
